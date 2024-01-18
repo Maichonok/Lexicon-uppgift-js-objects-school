@@ -28,8 +28,8 @@ const discreteMath = {
   },
 };
 
-const bisnessEnglish = {
-  name: "Bisness English",
+const businessEnglish = {
+  name: "Business English",
   students: [],
   teacher: {},
   addStudent: function (student) {
@@ -149,3 +149,39 @@ function addSubjectToTeacher(subject, teacher) {
 
 console.log(addSubjectToTeacher(discreteMath, teacher1));
 */
+
+// Ex.10
+//add students
+function addListOfStudents(student) {
+  school.students.push(student);
+}
+school.addStudent(student1);
+school.addStudent(student2);
+school.addStudent(student3);
+school.addStudent(student4);
+school.addStudent(student5);
+
+for (let student of school.students) {
+  console.log(student);
+}
+
+// add teachers
+function addListOfTeachers(teacher) {
+  school.teachers.push(teacher);
+}
+school.addTeacher(teacher1);
+school.addTeacher(teacher2);
+
+for (let teacher of school.teachers) {
+  console.log(teacher);
+}
+
+//add subjects for teachers
+teacher1.addSubject(discreteMath);
+teacher1.addSubject(dataScience);
+teacher2.addSubject(businessEnglish);
+
+console.log(discreteMath.teacher.name);
+console.log(dataScience.teacher.name);
+console.log(businessEnglish.teacher.name);
+
