@@ -239,9 +239,10 @@ school.addStudent(student4);
 school.addStudent(student5);
 
 function displayAllStudents() {
-  for (let student in school.students) {
+  console.log("Display students:");
+  for (let student of school.students) {
     // display the values
-    console.log(school.students[student]);
+    console.log(student);
   }
 }
 displayAllStudents();
@@ -259,9 +260,10 @@ teacher1.addSubject(dataScience);
 teacher2.addSubject(businessEnglish);
 
 function displayAllTeachers() {
-  for (let teacher in school.teachers) {
+  console.log("Display teachers:");
+  for (let teacher of school.teachers) {
     // display the values
-    console.log(school.teachers[teacher]);
+    console.log(teacher);
   }
 }
 displayAllTeachers();
@@ -274,8 +276,27 @@ student5.enlistToSubject(businessEnglish);
 student5.enlistToSubject(discreteMath);
 student5.enlistToSubject(dataScience);
 
-discreteMath.removeStudent("Maja");
-console.log(discreteMath);
-school.fireTeacher("Thomas Andersson");
-console.log(school.teachers);
+function displayAllSubjects() {
+  console.log("Display subjects:", school);
 
+  const map = {};
+
+  for (let student of school.students) {
+    for (let subject of student.subjects) {
+      map[subject.name] = subject;
+    }
+  }
+
+  for (let subject in map) {
+    console.log(map[subject]);
+  }
+}
+displayAllSubjects();
+
+//Other checks
+console.log("remove student");
+discreteMath.removeStudent("Maja");
+console.log("display subject", discreteMath);
+console.log("remove teacher");
+school.fireTeacher("Thomas Andersson");
+console.log("display teachers", school.teachers);
