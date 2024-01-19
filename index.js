@@ -5,14 +5,41 @@ const school = {
   zipcode: 12932,
   city: "Stockholm",
   students: [],
+  teachers: [],
+  rating: 4,
   addStudent: function (student) {
     this.students.push(student);
   },
-  teachers: [],
   addTeacher: function (teacher) {
     this.teachers.push(teacher);
   },
-  rating: 4,
+  fireTeacher: function (teacherName) {
+    this.teachers = this.teachers.filter(
+      (teacher) => teacher.name !== teacherName
+    );
+  },
+
+  relegateStudent: function (studentName) {
+    // find the student in the students array
+    let student = this.students.find((student) => student.name === studentName);
+
+    // if the student was found
+    if (student) {
+      // for each subject the student is enrolled in
+      for (let subject of student.subjects) {
+        // remove the student from the subject
+        subject.removeStudent(student.name);
+
+        // the student also leaves the subject
+        student.quitSubject(subject);
+      }
+
+      // finally, remove the student from the school
+      this.students = this.students.filter(
+        (student) => student.name !== studentName
+      );
+    }
+  },
 };
 
 // Ex.2 subjects
@@ -26,6 +53,20 @@ const discreteMath = {
   addTeacher: function (teacher) {
     this.teacher = teacher;
   },
+  removeStudent: function (student) {
+    let index = this.students.indexOf(student);
+    if (index !== -1) {
+      this.students.splice(index, 1);
+    }
+  },
+  removeTeacher: function () {
+    this.teacher = {};
+  },
+  removeStudent: function (studentName) {
+    this.students = this.students.filter(
+      (student) => student.name !== studentName
+    );
+  },
 };
 
 const businessEnglish = {
@@ -37,6 +78,20 @@ const businessEnglish = {
   },
   addTeacher: function (teacher) {
     this.teacher = teacher;
+  },
+  removeStudent: function (student) {
+    let index = this.students.indexOf(student);
+    if (index !== -1) {
+      this.students.splice(index, 1);
+    }
+  },
+  removeTeacher: function () {
+    this.teacher = {};
+  },
+  removeStudent: function (studentName) {
+    this.students = this.students.filter(
+      (student) => student.name !== studentName
+    );
   },
 };
 
@@ -50,6 +105,20 @@ const dataScience = {
   addTeacher: function (teacher) {
     this.teacher = teacher;
   },
+  removeStudent: function (student) {
+    let index = this.students.indexOf(student);
+    if (index !== -1) {
+      this.students.splice(index, 1);
+    }
+  },
+  removeTeacher: function () {
+    this.teacher = {};
+  },
+  removeStudent: function (studentName) {
+    this.students = this.students.filter(
+      (student) => student.name !== studentName
+    );
+  },
 };
 
 // Ex.3 students
@@ -58,7 +127,7 @@ const student1 = {
   age: 19,
   gender: "female",
   subjects: [],
-  enlistTosubject: function (subject) {
+  enlistToSubject: function (subject) {
     this.subjects.push(subject);
     subject.addStudent(this);
   },
@@ -69,7 +138,7 @@ const student2 = {
   age: 20,
   gender: "male",
   subjects: [],
-  enlistTosubject: function (subject) {
+  enlistToSubject: function (subject) {
     this.subjects.push(subject);
     subject.addStudent(this);
   },
@@ -80,7 +149,7 @@ const student3 = {
   age: 21,
   gender: "male",
   subjects: [],
-  enlistTosubject: function (subject) {
+  enlistToSubject: function (subject) {
     this.subjects.push(subject);
     subject.addStudent(this);
   },
@@ -91,7 +160,7 @@ const student4 = {
   age: 21,
   gender: "male",
   subjects: [],
-  enlistTosubject: function (subject) {
+  enlistToSubject: function (subject) {
     this.subjects.push(subject);
     subject.addStudent(this);
   },
@@ -102,7 +171,7 @@ const student5 = {
   age: 20,
   gender: "female",
   subjects: [],
-  enlistTosubject: function (subject) {
+  enlistToSubject: function (subject) {
     this.subjects.push(subject);
     subject.addStudent(this);
   },
@@ -113,8 +182,12 @@ const teacher1 = {
   name: "Thomas Andersson",
   subjects: [],
   addSubject: function (subject) {
-    this.subjects.push(subject);
-    subject.addTeacher(this);
+    if (!this.subjects.includes(subject)) {
+      this.subjects.push(subject);
+      subject.addTeacher(this);
+    } else {
+      console.log(`Subject ${subject.name} is already added!`);
+    }
   },
 };
 
@@ -122,8 +195,12 @@ const teacher2 = {
   name: "Maria Svensson",
   subjects: [],
   addSubject: function (subject) {
-    this.subjects.push(subject);
-    subject.addTeacher(this);
+    if (!this.subjects.includes(subject)) {
+      this.subjects.push(subject);
+      subject.addTeacher(this);
+    } else {
+      console.log(`Subject ${subject.name} is already added!`);
+    }
   },
 };
 
@@ -152,18 +229,22 @@ console.log(addSubjectToTeacher(discreteMath, teacher1));
 
 // Ex.10
 //add students
-function addListOfStudents(student) {
-  school.students.push(student);
-}
+// function addListOfStudents(student) {
+//   school.students.push(student);
+// }
 school.addStudent(student1);
 school.addStudent(student2);
 school.addStudent(student3);
 school.addStudent(student4);
 school.addStudent(student5);
 
-for (let student of school.students) {
-  console.log(student);
+function displayAllStudents() {
+  for (let student in school.students) {
+    // display the values
+    console.log(school.students[student]);
+  }
 }
+displayAllStudents();
 
 // add teachers
 function addListOfTeachers(teacher) {
@@ -172,16 +253,29 @@ function addListOfTeachers(teacher) {
 school.addTeacher(teacher1);
 school.addTeacher(teacher2);
 
-for (let teacher of school.teachers) {
-  console.log(teacher);
-}
-
 //add subjects for teachers
 teacher1.addSubject(discreteMath);
 teacher1.addSubject(dataScience);
 teacher2.addSubject(businessEnglish);
 
-console.log(discreteMath.teacher.name);
-console.log(dataScience.teacher.name);
-console.log(businessEnglish.teacher.name);
+function displayAllTeachers() {
+  for (let teacher in school.teachers) {
+    // display the values
+    console.log(school.teachers[teacher]);
+  }
+}
+displayAllTeachers();
+//add subjects for students
+student1.enlistToSubject(discreteMath);
+student2.enlistToSubject(discreteMath);
+student3.enlistToSubject(dataScience);
+student4.enlistToSubject(dataScience);
+student5.enlistToSubject(businessEnglish);
+student5.enlistToSubject(discreteMath);
+student5.enlistToSubject(dataScience);
+
+discreteMath.removeStudent("Maja");
+console.log(discreteMath);
+school.fireTeacher("Thomas Andersson");
+console.log(school.teachers);
 
